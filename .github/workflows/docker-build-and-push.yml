@@ -26,4 +26,4 @@ jobs:
       run: echo "${{ steps.artifactory-token.outputs.token }}" | docker login --password-stdin --username github-runner gitrunners-repository.artifactory.sonos.com
     
     - name: Build the Docker image
-      run: cd docker && ls -ltr && make
+      run: ls -ltr && make
