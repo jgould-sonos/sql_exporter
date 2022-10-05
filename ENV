@@ -1,0 +1,3 @@
+REPO=automation-docker-prod
+IMAGE=ei/sql_exporter
+VERSION=0.1
