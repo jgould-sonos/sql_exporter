@@ -1,0 +1,29 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: [self-hosted, 18.04]
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Get artifactory token
+      id: artifactory-token
+      run: |
+         secret=$(curl http://localhost:8200/v1/artifactory/token/github-runner | jq -r .data.access_token)
+         echo "::add-mask::$secret"
+         echo "::set-output name=token::$secret"
+    
+    - name: docker login
+      run: echo "${{ steps.artifactory-token.outputs.token }}" | docker login --password-stdin --username github-runner gitrunners-repository.artifactory.sonos.com
+    
+    - name: Build the Docker image
+      run: cd docker && ls -ltr && make
